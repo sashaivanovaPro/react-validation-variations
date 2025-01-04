@@ -18,12 +18,19 @@ export const RegistrationForm = () => {
   const [formValidation, setFormValidation] = useState(false)
 
   useEffect(() => {
-    if (emailError || passwordError || confirmError) {
-      setFormValidation(false)
-    } else {
+    if (
+      email &&
+      password &&
+      confirm &&
+      !emailError &&
+      !passwordError &&
+      !confirmError
+    ) {
       setFormValidation(true)
+    } else {
+      setFormValidation(false)
     }
-  }, [emailError, passwordError, confirmError])
+  }, [email, password, confirm, emailError, passwordError, confirmError])
 
   const emailHandler = (event) => {
     setEmail(event.target.value)
@@ -74,11 +81,38 @@ export const RegistrationForm = () => {
     }
   }
 
+  const resetForm = () => {
+    // Сначала очищаем значения полей
+    setEmail("")
+    setPassword("")
+    setConfirm("")
+
+    // Затем сбрасываем состояния touched
+    setEmailTouched(false)
+    setPasswordTouched(false)
+    setConfirmTouched(false)
+
+    // И сбрасываем ошибки
+    setEmailError("Email is required")
+    setPasswordError("Password is required")
+    setConfirmError("Passwords confirmation is required")
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    if (formValidation) {
+      console.log("Successful submit:", { email, password })
+
+      resetForm() // Cбрасываем форму
+    }
+  }
+
   return (
     <div className="registration-container ">
       <form
         action=""
         className="mt-10  mx-auto flex flex-col items-center w-4/5 max-w-[350px] mx-auto bg-white  rounded-lg pt-5 pb-5"
+        onSubmit={handleSubmit}
       >
         <h1 className="text-2xl text-blue-500 font-bold">Registration form</h1>
         <div className="h-5 mb-2">
@@ -88,11 +122,12 @@ export const RegistrationForm = () => {
         </div>
         <input
           type="text"
+          value={email} // React → DOM (отображение)
           name="email"
           placeholder="Enter your email"
           className="block mt-2.5 border rounded-md px-4 py-2 w-4/5 max-w-[250px]"
-          onBlur={(event) => blurHandler(event)}
-          onChange={(event) => emailHandler(event)}
+          onBlur={blurHandler}
+          onChange={emailHandler} // DOM → React (обновление)
         />
         <div className="h-5 mb-2">
           {passwordTouched && passwordError && (
@@ -102,10 +137,11 @@ export const RegistrationForm = () => {
         <input
           type="password"
           name="password"
+          value={password}
           placeholder="Create password"
           className="block mt-2.5 border rounded-md px-4 py-2 w-4/5 max-w-[250px]"
-          onBlur={(event) => blurHandler(event)}
-          onChange={(event) => passwordHandler(event)}
+          onBlur={blurHandler}
+          onChange={passwordHandler}
         />
         <div className="h-5 mb-2">
           {confirmTouched && confirmError && (
@@ -114,11 +150,12 @@ export const RegistrationForm = () => {
         </div>
         <input
           type="password"
+          value={confirm}
           name="confirm-password"
           placeholder="Confirm password"
           className="block mt-2.5 border rounded-md px-4 py-2 w-4/5 max-w-[250px]"
-          onBlur={(event) => blurHandler(event)}
-          onChange={(event) => confirmPasswordHandler(event)}
+          onBlur={blurHandler}
+          onChange={confirmPasswordHandler}
         />
         <button
           className="bg-blue-500 text-white px-4 py-2 mt-5 rounded"
