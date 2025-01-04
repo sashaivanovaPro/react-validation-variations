@@ -17,6 +17,9 @@ export const RegistrationForm = () => {
 
   const [formValidation, setFormValidation] = useState(false)
 
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
   useEffect(() => {
     if (
       email &&
@@ -111,54 +114,93 @@ export const RegistrationForm = () => {
     <div className="registration-container ">
       <form
         action=""
-        className="mt-10  mx-auto flex flex-col items-center w-4/5 max-w-[350px] mx-auto bg-white  rounded-lg pt-5 pb-5"
+        className="mt-10  mx-auto flex flex-col items-center w-4/5 max-w-[350px] mx-auto bg-white  rounded-lg p-8"
         onSubmit={handleSubmit}
       >
-        <h1 className="text-2xl text-blue-500 font-bold">Registration form</h1>
-        <div className="h-5 mb-2">
+        {/* Заголовок  */}
+        <h1 className="text-2xl text-blue-500 font-bold mb-6">
+          Registration form
+        </h1>
+
+        {/* Группа для email */}
+        <div className="flex flex-col w-full mb-4">
+          <input
+            type="text"
+            name="email"
+            value={email}
+            placeholder="Enter your email"
+            className={`w-full border rounded-md px-4 py-2 ${
+              emailTouched && emailError ? "border-red-500" : "border-gray-300"
+            }`}
+            onBlur={blurHandler}
+            onChange={emailHandler}
+          />
           {emailTouched && emailError && (
-            <span className="text-red-500">{emailError}</span>
+            <span className="text-red-500 text-sm mt-1">{emailError}</span>
           )}
         </div>
-        <input
-          type="text"
-          value={email} // React → DOM (отображение)
-          name="email"
-          placeholder="Enter your email"
-          className="block mt-2.5 border rounded-md px-4 py-2 w-4/5 max-w-[250px]"
-          onBlur={blurHandler}
-          onChange={emailHandler} // DOM → React (обновление)
-        />
-        <div className="h-5 mb-2">
+
+        {/* Группа для пароля */}
+        <div className="flex flex-col w-full mb-4">
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={password}
+              placeholder="Create password"
+              className={`w-full border rounded-md px-4 py-2 pr-10 ${
+                passwordTouched && passwordError
+                  ? "border-red-500"
+                  : "border-gray-300"
+              }`}
+              onBlur={blurHandler}
+              onChange={passwordHandler}
+            />
+            <button
+              type="button" // тип button, чтобы не происходила отправка формы
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? "👁️" : "👁️‍🗨️"}
+            </button>
+          </div>
           {passwordTouched && passwordError && (
-            <div className="text-red-500">{passwordError}</div>
+            <span className="text-red-500 text-sm mt-1">{passwordError}</span>
           )}
         </div>
-        <input
-          type="password"
-          name="password"
-          value={password}
-          placeholder="Create password"
-          className="block mt-2.5 border rounded-md px-4 py-2 w-4/5 max-w-[250px]"
-          onBlur={blurHandler}
-          onChange={passwordHandler}
-        />
-        <div className="h-5 mb-2">
+
+        {/* Группа для подтверждения пароля */}
+        <div className="flex flex-col w-full mb-6">
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              value={confirm}
+              name="confirm-password"
+              placeholder="Confirm password"
+              className={`w-full border rounded-md px-4 py-2 pr-10 ${
+                confirmTouched && confirmError
+                  ? "border-red-500"
+                  : "border-gray-300"
+              }`}
+              onBlur={blurHandler}
+              onChange={confirmPasswordHandler}
+            />
+            <button
+              type="button"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            >
+              {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
+            </button>
+          </div>
           {confirmTouched && confirmError && (
-            <div className="text-red-500">{confirmError}</div>
+            <span className="text-red-500 text-sm mt-1">{confirmError}</span>
           )}
         </div>
-        <input
-          type="password"
-          value={confirm}
-          name="confirm-password"
-          placeholder="Confirm password"
-          className="block mt-2.5 border rounded-md px-4 py-2 w-4/5 max-w-[250px]"
-          onBlur={blurHandler}
-          onChange={confirmPasswordHandler}
-        />
+
+        {/* Кнопка отправки формы */}
         <button
-          className="bg-blue-500 text-white px-4 py-2 mt-5 rounded"
+          className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
           disabled={!formValidation}
         >
