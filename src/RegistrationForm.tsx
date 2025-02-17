@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react"
 
 export const RegistrationForm = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirm, setConfirm] = useState("")
+  const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+  const [confirm, setConfirm] = useState<string>("")
 
-  const [emailTouched, setEmailTouched] = useState(false)
-  const [passwordTouched, setPasswordTouched] = useState(false)
-  const [confirmTouched, setConfirmTouched] = useState(false)
+  const [emailTouched, setEmailTouched] = useState<boolean>(false)
+  const [passwordTouched, setPasswordTouched] = useState<boolean>(false)
+  const [confirmTouched, setConfirmTouched] = useState<boolean>(false)
 
-  const [emailError, setEmailError] = useState("Email is required")
-  const [passwordError, setPasswordError] = useState("Password is required")
-  const [confirmError, setConfirmError] = useState(
+  const [emailError, setEmailError] = useState<string>("Email is required")
+  const [passwordError, setPasswordError] = useState<string>(
+    "Password is required"
+  )
+  const [confirmError, setConfirmError] = useState<string>(
     "Passwords confirmation is required"
   )
 
@@ -35,7 +37,7 @@ export const RegistrationForm = () => {
     }
   }, [email, password, confirm, emailError, passwordError, confirmError])
 
-  const emailHandler = (event) => {
+  const emailHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(String(event.target.value).toLowerCase())) {
@@ -45,7 +47,7 @@ export const RegistrationForm = () => {
     }
   }
 
-  const passwordHandler = (event) => {
+  const passwordHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value)
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{3,14}$/
     if (!passwordRegex.test(String(event.target.value))) {
@@ -58,7 +60,9 @@ export const RegistrationForm = () => {
     }
   }
 
-  const confirmPasswordHandler = (event) => {
+  const confirmPasswordHandler = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setConfirm(event.target.value)
     if (event.target.value !== password) {
       setConfirmError("Passwords do not match")
@@ -70,7 +74,7 @@ export const RegistrationForm = () => {
     }
   }
 
-  const blurHandler = (event) => {
+  const blurHandler = (event: React.FocusEvent<HTMLInputElement, Element>) => {
     switch (event.target.name) {
       case "email":
         setEmailTouched(true)
@@ -101,7 +105,7 @@ export const RegistrationForm = () => {
     setConfirmError("Passwords confirmation is required")
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (formValidation) {
       console.log("Successful submit:", { email, password })
