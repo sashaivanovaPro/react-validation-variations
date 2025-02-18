@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react"
 
 export const RegistrationForm = () => {
+  // Значения полей формы - values
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [confirm, setConfirm] = useState<string>("")
 
+  // Состояния взаимодействия с полями - touched
   const [emailTouched, setEmailTouched] = useState<boolean>(false)
   const [passwordTouched, setPasswordTouched] = useState<boolean>(false)
   const [confirmTouched, setConfirmTouched] = useState<boolean>(false)
 
+  // Сообщения об ошибках валидации - errors
   const [emailError, setEmailError] = useState<string>("Email is required")
   const [passwordError, setPasswordError] = useState<string>(
     "Password is required"
@@ -17,8 +20,10 @@ export const RegistrationForm = () => {
     "Passwords confirmation is required"
   )
 
+  // Общее состояние валидации формы - validation
   const [formValidation, setFormValidation] = useState(false)
 
+  // Управление видимостью паролей - passwordVisibility
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -37,6 +42,7 @@ export const RegistrationForm = () => {
     }
   }, [email, password, confirm, emailError, passwordError, confirmError])
 
+  // Обработчики событий - handlers
   const emailHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
