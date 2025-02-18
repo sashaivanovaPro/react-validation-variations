@@ -26,7 +26,7 @@ export interface UseFormValidationData {
   passwordVisibility: {
     showPassword: boolean
     setShowPassword: (value: boolean) => void
-    setShowConfirmPassword: () => void
+    setShowConfirmPassword: (value: boolean) => void
     showConfirmPassword: boolean
   }
 
