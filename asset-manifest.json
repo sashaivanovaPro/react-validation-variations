@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/react-validation-variations/static/css/main.4d026c6a.css",
-    "main.js": "/react-validation-variations/static/js/main.cc72d15a.js",
+    "main.js": "/react-validation-variations/static/js/main.a4e59365.js",
     "index.html": "/react-validation-variations/index.html",
     "main.4d026c6a.css.map": "/react-validation-variations/static/css/main.4d026c6a.css.map",
-    "main.cc72d15a.js.map": "/react-validation-variations/static/js/main.cc72d15a.js.map"
+    "main.a4e59365.js.map": "/react-validation-variations/static/js/main.a4e59365.js.map"
   },
   "entrypoints": [
     "static/css/main.4d026c6a.css",
-    "static/js/main.cc72d15a.js"
+    "static/js/main.a4e59365.js"
   ]
 }
