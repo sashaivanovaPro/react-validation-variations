@@ -1,14 +1,51 @@
-import { useFormValidation } from "./hooks/useFormValidation"
+// import { useFormValidation } from "./hooks/useFormValidation"
+import { useForm } from "react-hook-form"
+import {
+  RegistrationFormData,
+  registrationFormSchema,
+} from "./schemas/registrationFormSchema"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
 
 export const RegistrationForm = () => {
-  const { values, errors, touched, handlers, passwordVisibility, validation } =
-    useFormValidation()
+  // МИГРАЦИЯ С КАСТОМНОГО ХУКА НА REACT-HOOK-FORM + ZOD
+  // -------------------------------------------------
+  // 1. Замена useFormValidation на useForm из react-hook-form
+  // const { values, errors, touched, handlers, passwordVisibility, validation } =
+  //   useFormValidation()
+  //    ↓ заменено на ↓
+  // const { register, handleSubmit, formState: { errors, touchedFields, isDirty, isValid }, reset } = useForm<RegistrationFormData>({...})
+
+  // 2. Валидация с помощью Zod через zodResolver вместо ручных проверок в useEffect и обработчиках
+
+  // 3. Состояния видимости пароля оставлены на useState, т.к. не связаны с валидацией формы
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  // 4. Инициализация useForm с резолвером Zod и режимом валидации onBlur (аналогично логике кастомного хука)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, touchedFields, isDirty, isValid },
+    reset,
+  } = useForm<RegistrationFormData>({
+    resolver: zodResolver(registrationFormSchema),
+    mode: "onBlur", // Аналог поведения with touchedFields в кастомном хуке
+  })
+
+  // 5. Обработчик отправки формы с автоматической валидацией и сбросом
+  // Заменяет handleSubmit из кастомного хука и resetForm
+  const onSubmit = (data: RegistrationFormData) => {
+    console.log("Form submitted with data:", data)
+    reset()
+  }
+
   return (
     <div className="registration-container ">
       <form
         action=""
         className="mt-10  mx-auto flex flex-col items-center w-4/5 max-w-[350px] mx-auto bg-white  rounded-lg p-8"
-        onSubmit={handlers.handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
       >
         {/* Заголовок  */}
         <h1 className="text-2xl text-blue-500 font-bold mb-6">
@@ -19,19 +56,23 @@ export const RegistrationForm = () => {
         <div className="flex flex-col w-full mb-4">
           <input
             type="text"
-            name="email"
-            value={values.email}
+            {...register("email")}
             placeholder="Enter your email"
+            // name="email"
+            // value={values.email}
             className={`w-full border rounded-md px-4 py-2 ${
-              touched.email && errors.email
+              errors.email && touchedFields.email
                 ? "border-red-500"
                 : "border-gray-300"
             }`}
-            onBlur={handlers.blurHandler}
-            onChange={handlers.emailHandler}
+            // onBlur={handlers.blurHandler}
+            // onChange={handlers.emailHandler}
           />
-          {touched.email && errors.email && (
-            <span className="text-red-500 text-sm mt-1">{errors.email}</span>
+          {errors.email && touchedFields.email && (
+            <span className="text-red-500 text-sm mt-1">
+              {errors.email.message}
+              {/* Автоматическое сообщение из Zod схемы */}
+            </span>
           )}
         </div>
 
@@ -39,32 +80,32 @@ export const RegistrationForm = () => {
         <div className="flex flex-col w-full mb-4">
           <div className="relative">
             <input
-              type={passwordVisibility.showPassword ? "text" : "password"}
-              name="password"
-              value={values.password}
+              type={showPassword ? "text" : "password"}
+              {...register("password")}
+              // name="password"
+              // value={values.password}
               placeholder="Create password"
               className={`w-full border rounded-md px-4 py-2 pr-10 ${
-                touched.password && errors.password
+                errors.password && touchedFields.password
                   ? "border-red-500"
                   : "border-gray-300"
               }`}
-              onBlur={handlers.blurHandler}
-              onChange={handlers.passwordHandler}
+              // onBlur={handlers.blurHandler},
+              // onChange={handlers.passwordHandler}
             />
+            {/* Кнопка видимости пароля - функциональность сохранена как была */}
             <button
               type="button" // тип button, чтобы не происходила отправка формы
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-              onClick={() =>
-                passwordVisibility.setShowPassword(
-                  !passwordVisibility.showPassword
-                )
-              }
+              onClick={() => setShowPassword(!showPassword)}
             >
-              {passwordVisibility.showPassword ? "👁️" : "👁️‍🗨️"}
+              {showPassword ? "👁️" : "👁️‍🗨️"}
             </button>
           </div>
-          {touched.password && errors.password && (
-            <span className="text-red-500 text-sm mt-1">{errors.password}</span>
+          {errors.password && touchedFields.password && (
+            <span className="text-red-500 text-sm mt-1">
+              {errors.password.message}
+            </span>
           )}
         </div>
 
@@ -72,34 +113,32 @@ export const RegistrationForm = () => {
         <div className="flex flex-col w-full mb-6">
           <div className="relative">
             <input
-              type={
-                passwordVisibility.showConfirmPassword ? "text" : "password"
-              }
-              value={values.confirm}
-              name="confirm-password"
+              type={showConfirmPassword ? "text" : "password"}
+              {...register("confirm")}
+              // value={values.confirm}
+              // name="confirm-password"
               placeholder="Confirm password"
               className={`w-full border rounded-md px-4 py-2 pr-10 ${
-                touched.confirm && errors.confirm
+                errors.confirm && touchedFields.confirm
                   ? "border-red-500"
                   : "border-gray-300"
               }`}
-              onBlur={handlers.blurHandler}
-              onChange={handlers.confirmPasswordHandler}
+              // onBlur={handlers.blurHandler}
+              // onChange={handlers.confirmPasswordHandler}
             />
             <button
               type="button"
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-              onClick={() =>
-                passwordVisibility.setShowConfirmPassword(
-                  !passwordVisibility.showConfirmPassword
-                )
-              }
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
-              {passwordVisibility.showConfirmPassword ? "👁️" : "👁️‍🗨️"}
+              {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
             </button>
           </div>
-          {touched.confirm && errors.confirm && (
-            <span className="text-red-500 text-sm mt-1">{errors.confirm}</span>
+          {errors.confirm && touchedFields.confirm && (
+            <span className="text-red-500 text-sm mt-1">
+              {errors.confirm.message}
+              {/* Сообщение из refine в Zod схеме */}
+            </span>
           )}
         </div>
 
@@ -107,7 +146,7 @@ export const RegistrationForm = () => {
         <button
           className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
-          disabled={!validation.formValidation}
+          disabled={!(isDirty && isValid)}
         >
           Submit
         </button>
