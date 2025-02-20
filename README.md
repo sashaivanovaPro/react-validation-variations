@@ -8,55 +8,54 @@ The project consists of several implementations of the same registration form, e
 
 ### Implementations
 
-1. **Basic Validation (basic-validation)** - Using React's useState and useEffect hooks directly in component
-2. **TypeScript Migration (typescript-migration)** - Adding TypeScript to the basic validation approach
-3. **Custom Hook Validation (current)** - Form logic extracted into a reusable custom hook
+1. **Basic Validation (basic-validation)** - Using React's useState and useEffect hooks
+2. **TypeScript Migration (typescript-migration)** - Adding TypeScript to the basic validation
 
-## Current Implementation: Custom Hook Validation
+3. **Custom Hook Validation (custom-hook)** - Form logic extracted into a reusable custom hook
+4. **React Hook Form + Zod (current)** - Using react-hook-form library with Zod schema validation
 
-This implementation demonstrates how to improve code organization by extracting form validation logic into a custom hook. The main benefits are:
+## Current Implementation: React Hook Form + Zod
 
-- **Separation of concerns** - UI components focus on rendering, while validation logic is encapsulated
-- **Reusability** - The same validation hook can be used across multiple forms
-- **Improved maintainability** - Easier to modify validation logic in one place
-- **Cleaner component code** - Component becomes more focused and readable
+This implementation demonstrates a modern approach to form validation using:
+
+- **react-hook-form** - For efficient form state management
+- **Zod** - For schema-based validation with TypeScript integration
 
 ### Key Features
 
-- **useFormValidation hook** - Contains all form state and validation logic
-- **Structured data organization** - Hook returns logically grouped data:
-  - `values` - form field values
-  - `errors` - validation error messages
-  - `touched` - tracking field interactions
-  - `handlers` - event handlers for form fields
-  - `passwordVisibility` - toggle password display
-  - `validation` - form validation state
+- **Schema-based validation** - All validation rules defined in a Zod schema
+- **Type safety** - TypeScript types derived automatically from the schema
+- **Improved performance** - react-hook-form's optimized re-rendering
+- **Built-in error handling** - Standardized error messages from schema
+- **Simpler component code** - Less boilerplate compared to manual validation
 
-### Hook Design Pattern
+### Validation Rules
 
-The custom hook follows best practices for React hooks:
-
-- Uses standard React hooks internally (useState, useEffect)
-- Returns consistent interface for component consumption
-- Handles all related functionality in one place
+- **Email**: Required field with email format validation
+- **Password**:
+  - 3-14 characters in length
+  - At least one uppercase letter
+  - At least one number
+- **Password Confirmation**: Must match the password field
 
 ## Technologies
 
-- React Hooks
-- Custom Hooks
+- React
 - TypeScript
+- react-hook-form
+- Zod schema validation
 - Tailwind CSS
 
-## Validation Rules
+## Comparison with Previous Implementations
 
-The form validates:
-
-- **Email** - Format validation using regex
-- **Password**:
-  - 3-10 characters
-  - At least one uppercase letter
-  - At least one number
-- **Password Confirmation** - Must match password field
+| Feature         | Basic Hooks                  | Custom Hook                  | React Hook Form + Zod  |
+| --------------- | ---------------------------- | ---------------------------- | ---------------------- |
+| Code Size       | Largest                      | Medium                       | Smallest               |
+| Type Safety     | Manual typing                | Manual typing                | Auto-generated types   |
+| Performance     | Re-renders on each keystroke | Re-renders on each keystroke | Optimized re-rendering |
+| Maintainability | Low                          | Medium                       | High                   |
+| Error messages  | Manual definition            | Manual definition            | Schema-driven          |
+| Reusability     | Low                          | Medium                       | High                   |
 
 ## Installation
 
@@ -72,3 +71,9 @@ npm install
 ```bash
 npm start
 ```
+
+## Learning Resources
+
+- [React Hook Form Documentation](https://react-hook-form.com/)
+- [Zod Documentation](https://zod.dev/)
+- [TypeScript Integration Guide](https://react-hook-form.com/get-started#TypeScript)
