@@ -8,34 +8,48 @@ The project consists of several implementations of the same registration form, e
 
 ### Implementations
 
-1. **Basic Validation (basic-validation)** - Using React's useState and useEffect hooks
-2. **TypeScript Migration (current)** - Adding TypeScript to the basic validation
+1. **Basic Validation (basic-validation)** - Using React's useState and useEffect hooks directly in component
+2. **TypeScript Migration (typescript-migration)** - Adding TypeScript to the basic validation approach
+3. **Custom Hook Validation (current)** - Form logic extracted into a reusable custom hook
 
-## Current Implementation: TypeScript Migration
+## Current Implementation: Custom Hook Validation
 
-This implementation adds static typing to the basic form validation approach. The main benefits are:
+This implementation demonstrates how to improve code organization by extracting form validation logic into a custom hook. The main benefits are:
 
-- **Type safety** - Catching potential errors at compile time
-- **Better IDE support** - Improved autocompletion and documentation
-- **Self-documenting code** - Types serve as built-in documentation
-- **Preparation for advanced patterns** - Foundation for typed custom hooks and schema validation
+- **Separation of concerns** - UI components focus on rendering, while validation logic is encapsulated
+- **Reusability** - The same validation hook can be used across multiple forms
+- **Improved maintainability** - Easier to modify validation logic in one place
+- **Cleaner component code** - Component becomes more focused and readable
 
 ### Key Features
 
-- **TypeScript interfaces** for form data
-- **Typed React states** using generic parameters
-- **Type-safe event handlers** with correct event types
-- **Explicit return types** for functions
+- **useFormValidation hook** - Contains all form state and validation logic
+- **Structured data organization** - Hook returns logically grouped data:
+  - `values` - form field values
+  - `errors` - validation error messages
+  - `touched` - tracking field interactions
+  - `handlers` - event handlers for form fields
+  - `passwordVisibility` - toggle password display
+  - `validation` - form validation state
+
+### Hook Design Pattern
+
+The custom hook follows best practices for React hooks:
+
+- Uses standard React hooks internally (useState, useEffect)
+- Returns consistent interface for component consumption
+- Handles all related functionality in one place
 
 ## Technologies
 
-- React
+- React Hooks
+- Custom Hooks
 - TypeScript
 - Tailwind CSS
 
 ## Validation Rules
 
-The validation logic remains the same as in the basic implementation:
+The form validates:
 
 - **Email** - Format validation using regex
 - **Password**:
